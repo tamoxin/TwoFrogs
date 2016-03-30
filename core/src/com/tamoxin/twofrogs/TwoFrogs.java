@@ -1,9 +1,9 @@
 package com.tamoxin.twofrogs;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.tamoxin.helpers.AssetLoader;
-import com.tamoxin.screens.GameScreen;
+		import com.badlogic.gdx.Game;
+		import com.badlogic.gdx.Gdx;
+		import com.tamoxin.helpers.AssetLoader;
+		import com.tamoxin.screens.GameScreen;
 
 public class TwoFrogs extends Game {
 

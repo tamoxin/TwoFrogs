@@ -14,21 +14,50 @@ public class Frog {
     private float rotation;
     private int width;
     private int height;
+    private float originalX;
+    private float originalRightX;
 
     private boolean isInLeftSide;
-    private boolean isInRightSide;
+    private boolean isDead;
 
     public Frog(float x, float y, int width, int height) {
+
         this.height = height;
         this.width = width;
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
-        //acceleration = new Vector2(460, 0);
-        isInLeftSide = false;
+        originalX = x;
+        originalRightX = originalX + 34;
+        isInLeftSide = true;
+        isDead = false;
     }
 
     public void update(float delta) {
         position.add(velocity.cpy().scl(delta));
+
+        if(position.x <= originalX) {
+            velocity.x = 0;
+            position.x = originalX;
+            rotation = 0;
+        }
+
+        if(position.x >= originalRightX) {
+            velocity.x = 0;
+            position.x = originalRightX;
+            rotation = 0;
+        }
+
+        if(isGoingLeft()) {
+            rotation -= 600 * delta;
+            if(rotation < -20)
+                rotation = -20;
+        }
+
+        if(isGoingRight()) {
+            rotation += 600 * delta;
+            if(rotation > 20)
+                rotation = 20;
+        }
     }
 
     public void onClick() {
@@ -39,6 +68,22 @@ public class Frog {
             velocity.x = -140;
             isInLeftSide = true;
         }
+    }
+
+    public boolean isFrogDead(){
+        return isDead;
+    }
+
+    public void killFrog(){
+        isDead = false;
+    }
+
+    public boolean isGoingRight() {
+        return velocity.x > 0;
+    }
+
+    public boolean isGoingLeft() {
+        return velocity.x < 0;
     }
 
     public float getX() {

@@ -7,10 +7,11 @@ import com.tamoxin.gameobjects.Frog;
  */
 public class GameWorld {
 
-    private Frog leftFrog;
+    private Frog leftFrog, rightFrog;
 
     public GameWorld(int bottom) {
-        leftFrog = new Frog(6, bottom - 23, 20, 18);
+        leftFrog = new Frog(2, bottom - 28, 26, 23);
+        rightFrog = new Frog(73, bottom - 28, 26, 23);
     }
 
     public void update(float delta) {
@@ -19,5 +20,9 @@ public class GameWorld {
 
     public Frog getLeftFrog() {
         return leftFrog;
+    }
+
+    public Frog getRightFrog() {
+        return rightFrog;
     }
 }

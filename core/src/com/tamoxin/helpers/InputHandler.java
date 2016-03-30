@@ -13,6 +13,7 @@ public class InputHandler implements InputProcessor {
 
     public InputHandler(Frog frogLeft) {
         this.frogLeft = frogLeft;
+        this.frogRight = frogRight;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            frogLeft.onClick();
+        frogLeft.onClick();
         return true;
     }
 
