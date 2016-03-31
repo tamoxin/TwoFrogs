@@ -24,10 +24,19 @@ public class Scrollable {
         gameHeight = Gdx.graphics.getHeight()/(Gdx.graphics.getWidth() / 136);
     }
 
+    public Scrollable(int width, int height, float scrollSpeed) {
+        position = new Vector2(0, 0);
+        velocity = new Vector2(0, scrollSpeed);
+        this.height = height;
+        this.width = width;
+        isScrolledDown = false;
+        gameHeight = Gdx.graphics.getHeight()/(Gdx.graphics.getWidth() / 136);
+    }
+
     public void update(float delta) {
         position.add(velocity.cpy().scl(delta));
 
-        if(position.y - height > gameHeight)
+        if(position.y > gameHeight)
             isScrolledDown = true;
     }
 
@@ -39,6 +48,14 @@ public class Scrollable {
 
     public boolean isScrolledDown() {
         return isScrolledDown;
+    }
+
+    public void setXPosition(int newX) {
+        position.x = newX;
+    }
+
+    public void setYPosition(int newY) {
+        position.y = newY;
     }
 
     public float getX() {

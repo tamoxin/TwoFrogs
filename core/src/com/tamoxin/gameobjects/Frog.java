@@ -9,7 +9,6 @@ public class Frog {
 
     private Vector2 position;
     private Vector2 velocity;
-    //private Vector2 acceleration;
 
     private float rotation;
     private int width;
@@ -70,7 +69,7 @@ public class Frog {
         }
     }
 
-    public boolean isFrogDead(){
+    public boolean isDead(){
         return isDead;
     }
 

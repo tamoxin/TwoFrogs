@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.tamoxin.gameobjects.Crocodile;
 import com.tamoxin.gameobjects.Frog;
 import com.tamoxin.helpers.AssetLoader;
 
@@ -27,12 +28,15 @@ public class GameRenderer {
     // Game Objects
     Frog leftFrog;
     Frog rightFrog;
+    Crocodile rightCrocodile, leftCrocodile;
 
     // Game Assets
     private TextureRegion background;
     private TextureRegion lFrog, lFrogStart, lFrogEnd;
     private TextureRegion rFrog, rFrogStart, rFrogEnd;
-    private Animation leftFrogAnimation, rightFrogAnimation;
+    private TextureRegion[] leftCrocodileTexture, rightCrocodileTexture;
+    private Animation leftFrogAnimation, rightFrogAnimation, rightCrocodileAnimation,
+                        leftCrocodileAnimation;
 
     public GameRenderer(GameWorld world, int bottom) {
         gameWorld = world;
@@ -60,15 +64,31 @@ public class GameRenderer {
     }
 
     private void initAssets() {
+        // Background
         background = AssetLoader.background;
+
+        // Left Frog
         lFrog = AssetLoader.lFrog;
         lFrogStart = AssetLoader.lFrogStart;
         lFrogEnd = AssetLoader.lFrogEnd;
+
+        // Right Frog
         rFrog = AssetLoader.rFrog;
         rFrogStart = AssetLoader.rFrogStart;
         rFrogEnd = AssetLoader.rFrogEnd;
+
+        leftCrocodileTexture = new TextureRegion[5];
+        System.arraycopy(AssetLoader.leftCrocodile, 0, leftCrocodileTexture, 0, leftCrocodileTexture.length);
+        leftCrocodileAnimation = AssetLoader.rightCrocodileAnimation;
+
+        rightCrocodileTexture = new TextureRegion[5];
+        System.arraycopy(AssetLoader.rightCrocodile, 0, rightCrocodileTexture, 0, rightCrocodileTexture.length);
+        rightCrocodileAnimation = AssetLoader.rightCrocodileAnimation;
+
+        // Animations
         leftFrogAnimation = AssetLoader.leftFrogAnimation;
         rightFrogAnimation = AssetLoader.rightFrogAnimation;
+
     }
 
     public void render(float runTime) {
@@ -89,6 +109,12 @@ public class GameRenderer {
         batch.draw(rightFrogAnimation.getKeyFrame(runTime), rightFrog.getX(), rightFrog.getY(),
                 rightFrog.getWidth() / 2.0f, rightFrog.getHeight() / 2.0f,
                 rightFrog.getWidth(), rightFrog.getHeight(), 1, 1, rightFrog.getRotation());
+
+        // batch.draw(rightCrocodileAnimation.getKeyFrame(runTime), rightCrocodile.getX(),
+        //        rightCrocodile.getY(), rightCrocodile.getWidth(), rightCrocodile.getHeight());
+
+        //batch.draw(leftCrocodileAnimation.getKeyFrame(runTime), leftCrocodile.getX(),
+        //        leftCrocodile.getY(), leftCrocodile.getWidth(), leftCrocodile.getHeight());
 
         batch.end();
     }

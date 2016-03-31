@@ -5,5 +5,5 @@ package com.tamoxin.gameobjects;
  */
 public class ScrollHandler {
     Fly fly1, fly2, fly3;
-    Trap trap1, trap2, trap3;
+
 }

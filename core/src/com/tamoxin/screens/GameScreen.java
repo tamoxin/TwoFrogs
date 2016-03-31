@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
 
         gameWorld = new GameWorld(bottom);
         gameRenderer = new GameRenderer(gameWorld, bottom);
-        Gdx.input.setInputProcessor(new InputHandler(gameWorld.getLeftFrog()));
+        Gdx.input.setInputProcessor(new InputHandler(gameWorld.getLeftFrog(), gameWorld.getRightFrog()));
     }
 
     @Override

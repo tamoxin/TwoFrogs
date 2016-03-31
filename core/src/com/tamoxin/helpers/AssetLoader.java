@@ -24,6 +24,26 @@ public class AssetLoader {
     public static Animation rightFrogAnimation;
     public static TextureRegion rFrog, rFrogStart, rFrogEnd;
 
+    // Left Crocodile assets
+    public static Texture leftCrocodileTexture;
+    public static Animation leftCrocodileAnimation;
+    public static TextureRegion[] leftCrocodile = new TextureRegion[5];
+
+    // Right Crocodile assets
+    public static Texture rightCrocodileTexture;
+    public static Animation rightCrocodileAnimation;
+    public static TextureRegion[] rightCrocodile = new TextureRegion[5];
+
+    // Left Fly assets
+    private static Texture leftFlyTexture;
+    private static Animation leftFlyAnimation;
+    private static TextureRegion lFly1, lFly2, lFly3, lFly4;
+
+    // Right Fly assets
+    private static Texture rightFlyTexture;
+    private static Animation rightFlyAnimation;
+    private static TextureRegion rFly1, rFly2, rFly3, rFly4;
+
     public static void load() {
 
         // Background
@@ -60,6 +80,28 @@ public class AssetLoader {
         TextureRegion[] rightFrog = {rFrog, rFrogStart, rFrogEnd};
         rightFrogAnimation = new Animation(0.15f, rightFrog);
         rightFrogAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        // Left Crocodile
+        leftCrocodileTexture = new Texture(Gdx.files.internal("data/leftCroc.png"));
+        leftCrocodileTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        for(int i = 0, x = 0; i < leftCrocodile.length; i++, x+=32) {
+            leftCrocodile[i] = new TextureRegion(leftCrocodileTexture, x, 0, 32, 35);
+            leftCrocodile[i].flip(false, true);
+        }
+        leftCrocodileAnimation = new Animation(0.10f, leftCrocodile);
+        leftCrocodileAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        // Right Crocodile
+        rightCrocodileTexture = new Texture(Gdx.files.internal("data/rightCroc.png"));
+        rightCrocodileTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        for(int i = 0, x = 0; i < rightCrocodile.length; i++, x+=32) {
+            rightCrocodile[i] = new TextureRegion(rightCrocodileTexture, x, 0, 32, 35);
+            rightCrocodile[i].flip(false, true);
+        }
+        rightCrocodileAnimation = new Animation(0.10f, rightCrocodile);
+        rightCrocodileAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
 
     }
