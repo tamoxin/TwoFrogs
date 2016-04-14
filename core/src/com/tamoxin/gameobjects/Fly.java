@@ -8,7 +8,12 @@ import java.util.Random;
 public class Fly extends Scrollable {
 
     public Fly(float x, float y, int width, int height, float scrollSpeed) {
-        super(x, y, width, height, scrollSpeed);
+        super(x, y, width, height, scrollSpeed, 1);
+    }
+
+    @Override
+    public void update(float delta) {
+        super.update(delta);
     }
 
     @Override

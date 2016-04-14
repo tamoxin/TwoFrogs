@@ -10,28 +10,13 @@ import java.util.Vector;
  */
 public class Crocodile extends Scrollable{
 
-    private float originalY;
-
     public Crocodile(float x, float y, int width, int height, float scrollSpeed) {
-        super(x, y, width, height, scrollSpeed);
-        originalY = y;
-    }
-
-    // Puts the position in (0, 0)
-    public Crocodile(int width, int height, float scrollSpeed) {
-        super(width, height, scrollSpeed);
+        super(x, y, width, height, scrollSpeed, 0);
     }
 
     @Override
     public void update(float delta) {
-        position.add(velocity.cpy().scl(delta));
-
-        if(position.y > gameHeight + 10)
-            position.y = originalY;
-    }
-
-    public float getOriginalY() {
-        return originalY;
+        super.update(delta);
     }
 
     @Override
