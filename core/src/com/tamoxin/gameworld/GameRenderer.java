@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Queue;
 import com.tamoxin.gameobjects.Crocodile;
 import com.tamoxin.gameobjects.Fly;
 import com.tamoxin.gameobjects.Frog;
-import com.tamoxin.gameobjects.ScrollHandler;
 import com.tamoxin.gameobjects.Scrollable;
 import com.tamoxin.helpers.AssetLoader;
 
@@ -140,6 +139,7 @@ public class GameRenderer {
 
         batch.enableBlending();
 
+        rightElementsRenderer(runTime);
         leftElementsRenderer(runTime);
         leftFrogRenderer(runTime);
         rightFrogRenderer(runTime);
@@ -176,7 +176,10 @@ public class GameRenderer {
     }
 
     private void leftElementsRenderer(float runTime) {
+
         for(int i = 0; i < leftElements.size; i++) {
+            if(leftElements.get(i).isStarted() == false){ break; }
+
             if(leftElements.get(i).getId() == 0) {
                 leftAnimation = leftCrocodileAnimation;
             }
@@ -189,6 +192,17 @@ public class GameRenderer {
     }
 
     private void rightElementsRenderer(float runTime) {
+        for(int i = 0; i < rightElements.size; i++) {
+            if(rightElements.get(i).isStarted() == false) { break; }
 
+            if(rightElements.get(i).getId() == 0) {
+                rightAnimation = rightCrocodileAnimation;
+            }
+            else {
+                rightAnimation = rightFlyAnimation;
+            }
+            batch.draw(rightAnimation.getKeyFrame(runTime), rightElements.get(i).getX(),
+                    rightElements.get(i).getY(), rightElements.get(i).getWidth(), rightElements.get(i).getHeight());
+        }
     }
 }

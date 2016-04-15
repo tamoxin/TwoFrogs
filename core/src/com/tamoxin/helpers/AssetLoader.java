@@ -87,10 +87,10 @@ public class AssetLoader {
         rightFlyTexture = new Texture(Gdx.files.internal("data/rightFly.png"));
         rightFlyTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        rFly1 = new TextureRegion(leftFlyTexture, 0, 0, 29, 24);
-        rFly2 = new TextureRegion(leftFlyTexture, 29, 0, 29, 24);
-        rFly3 = new TextureRegion(leftFlyTexture, 58, 0, 29, 24);
-        rFly4 = new TextureRegion(leftFlyTexture, 87, 0, 29, 24);
+        rFly1 = new TextureRegion(rightFlyTexture, 0, 0, 29, 24);
+        rFly2 = new TextureRegion(rightFlyTexture, 29, 0, 29, 24);
+        rFly3 = new TextureRegion(rightFlyTexture, 58, 0, 29, 24);
+        rFly4 = new TextureRegion(rightFlyTexture, 87, 0, 29, 24);
 
         rightFly[0] = rFly1;
         rightFly[1] = rFly2;

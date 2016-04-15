@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Queue;
 import com.tamoxin.gameobjects.Crocodile;
 import com.tamoxin.gameobjects.Fly;
 import com.tamoxin.gameobjects.Frog;
-import com.tamoxin.gameobjects.ScrollHandler;
 import com.tamoxin.gameobjects.Scrollable;
 
 import java.util.Random;
@@ -15,7 +14,7 @@ import java.util.Random;
  */
 public class GameWorld {
 
-    private final int OBJECTS_SPEED = 50;
+    private final int OBJECTS_SPEED = 100;
     private final int CROCODILE_HEIGHT = 29;
     private final int CROCODILE_WIDTH = 31;
     private final int FLY_HEIGHT = 12;//24
@@ -37,8 +36,6 @@ public class GameWorld {
     private Queue <Fly> leftFliesQueue, rightFliesQueue;
     private Queue <Scrollable> leftElementsQueue, rightElementsQueue;
 
-    private ScrollHandler handler;
-
     public GameWorld(int bottom) {
         random = new Random();
         leftFrog = new Frog(2, bottom - 28, 26, 23);
@@ -59,21 +56,30 @@ public class GameWorld {
         // Fill the elements queues
         for(int i = 0; i < 3; i++) {
             addRandomToLeftElementsQueue();
+            addRandomToRightElementsQueue();
         }
         leftElementsQueue.first().start();
+        rightElementsQueue.first().start();
     }
 
     public void update(float delta) {
-        // Update left elements queue
+
         leftFrog.update(delta);
         rightFrog.update(delta);
+        updateLeftElementsQueue(delta);
+        updateRightElementsQueue(delta);
 
+    }
+
+    // Update queues
+    private void updateLeftElementsQueue(float delta) {
         for(int i = 0; i < leftElementsQueue.size; i++) {
 
             leftElementsQueue.get(i).update(delta);
 
-            if(leftElementsQueue.get(i).hasPassedMidPoint())
+            if(leftElementsQueue.get(i).hasPassedMidPoint()) {
                 leftElementsQueue.get(i + 1).start();
+            }
 
             if(leftElementsQueue.get(i).isScrolledDown()) {
                 leftElementsQueue.get(i).reset(0);
@@ -88,34 +94,31 @@ public class GameWorld {
                 addRandomToLeftElementsQueue();
             }
         }
-
-        // Update right elements queue
-//        for(int i = 0; i < rightElementsQueue.size; i++) {
-//            rightElementsQueue.get(i).update(delta);
-//            if(rightElementsQueue.get(i).isScrolledDown()) {
-//                rightElementsQueue.get(i).reset(rightElementsQueue.last().getTailY());
-//                if(rightElementsQueue.get(i).getId() == 0) {
-//                    rightCrocodilesQueue.addLast((Crocodile) rightElementsQueue.get(i));
-//                }
-//                else {
-//                    rightFliesQueue.addLast((Fly) rightElementsQueue.get(i));
-//                }
-//
-//                rightElementsQueue.removeIndex(i);
-//                setRightElementsQueue();
-//            }
-//        }
     }
 
-    public Frog getLeftFrog() {
-        return leftFrog;
+    private void updateRightElementsQueue(float delta) {
+        for(int j = 0; j < rightElementsQueue.size; j++) {
+            rightElementsQueue.get(j).update(delta);
+
+            if(rightElementsQueue.get(j).hasPassedMidPoint()) {
+                rightElementsQueue.get(j + 1).start();
+            }
+
+            if(rightElementsQueue.get(j).isScrolledDown()) {
+                rightElementsQueue.get(j).reset(0);
+                if(rightElementsQueue.get(j).getId() == 0) {
+                    rightCrocodilesQueue.addLast((Crocodile) rightElementsQueue.get(j));
+                } else {
+                    rightFliesQueue.addLast((Fly) rightElementsQueue.get(j));
+                }
+
+                rightElementsQueue.removeIndex(j);
+                addRandomToRightElementsQueue();
+            }
+        }
     }
 
-    public Frog getRightFrog() {
-        return rightFrog;
-    }
-
-    // Set Queues
+    // Setters
     private void setRightCrocodilesQueue() {
         // Crocodiles should be 31x29
         rightCroc1 = new Crocodile(71, 0, CROCODILE_WIDTH, CROCODILE_HEIGHT, OBJECTS_SPEED);
@@ -128,9 +131,9 @@ public class GameWorld {
     }
 
     private void setRightFliesQueue() {
-        rightFly1 = new Fly(77, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
-        rightFly2 = new Fly(77, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
-        rightFly3 = new Fly(77, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
+        rightFly1 = new Fly(80, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
+        rightFly2 = new Fly(80, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
+        rightFly3 = new Fly(80, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
 
         rightFliesQueue.addFirst(rightFly1);
         rightFliesQueue.addFirst(rightFly2);
@@ -148,43 +151,16 @@ public class GameWorld {
     }
 
     private void setLeftFliesQueue() {
-        leftFly1 = new Fly(11, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
-        leftFly2 = new Fly(11, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
-        leftFly3 = new Fly(11, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
+        leftFly1 = new Fly(10, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
+        leftFly2 = new Fly(10, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
+        leftFly3 = new Fly(10, 0, FLY_WIDTH, FLY_HEIGHT, OBJECTS_SPEED);
 
         leftFliesQueue.addFirst(leftFly1);
         leftFliesQueue.addFirst(leftFly2);
         leftFliesQueue.addFirst(leftFly3);
     }
 
-    public void setLeftElementsQueue() {
-
-    }
-
-    public void setRightElementsQueue() {
-        int type;
-
-        // This for fills the right elements queue
-        for(int i = 0; i < rightElementsQueue.size; i++) {
-            if(rightElementsQueue.get(i) == null) {
-                type = random.nextInt(2);
-                if (type == 0) {
-                    rightElementsQueue.addLast(rightCrocodilesQueue.removeFirst());
-                } else {
-                    rightElementsQueue.addLast(rightFliesQueue.removeFirst());
-                }
-
-                // Set the properties for the right element in the i position
-                if(rightElementsQueue.size > 1) {
-                    rightElementsQueue.get(i).setYPosition(OBJECTS_GAP - rightElementsQueue.get(i-1).getTailY());
-                    rightElementsQueue.get(i).setVelocityY(SCROLL_SPEED);
-                    rightElementsQueue.get(i).setRandomSide();
-                }
-            }
-        }
-    }
-
-    //
+    // Add elements at random position
     public void addRandomToLeftElementsQueue() {
         int type = random.nextInt(2);
         if(type == 0){
@@ -195,8 +171,17 @@ public class GameWorld {
         leftElementsQueue.last().reset(0);
     }
 
+    public void addRandomToRightElementsQueue() {
+        int type = random.nextInt(2);
+        if(type == 0) {
+            rightElementsQueue.addLast(rightCrocodilesQueue.removeFirst());
+        } else {
+            rightElementsQueue.addLast(rightFliesQueue.removeFirst());
+        }
+        rightElementsQueue.last().reset(0);
+    }
 
-    // Get Queues
+    // Getters
     public Queue<Fly> getLeftFlies() {
         return leftFliesQueue;
     }
@@ -221,7 +206,12 @@ public class GameWorld {
         return rightElementsQueue;
     }
 
-    public ScrollHandler getHandler() {
-        return handler;
+    public Frog getLeftFrog() {
+        return leftFrog;
     }
+
+    public Frog getRightFrog() {
+        return rightFrog;
+    }
+
 }

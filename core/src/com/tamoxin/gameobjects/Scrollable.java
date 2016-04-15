@@ -10,19 +10,19 @@ import java.util.Random;
  */
 public class Scrollable {
 
-    private Vector2 position;
-    private Vector2 velocity;
-    private int height;
-    private int width;
-    private float gameHeight;
-    private int id;
-    private float originalY;
-    private float originalX;
-    private Random random;
-    private int side;
-    private boolean isScrolledDown;
-    private boolean itPassedMidPoint;
-    private boolean start;
+    protected Vector2 position;
+    protected Vector2 velocity;
+    protected int height;
+    protected int width;
+    protected float gameHeight;
+    protected int id;
+    protected float originalY;
+    protected float originalX;
+    protected Random random;
+    protected int side;
+    protected boolean isScrolledDown;
+    protected boolean itPassedMidPoint;
+    protected boolean start;
 
     public Scrollable(float x, float y, int width, int height, float scrollSpeed, int id) {
         gameHeight = Gdx.graphics.getHeight()/(Gdx.graphics.getWidth() / 136);
@@ -66,13 +66,15 @@ public class Scrollable {
         setYPosition(newY);
         itPassedMidPoint = false;
         isScrolledDown = false;
-        setRandomSide();
         start = false;
-        //stop();
     }
 
     public void start() {
         start = true;
+    }
+
+    public boolean isStarted() {
+        return start;
     }
 
     public boolean isScrolledDown() {
@@ -131,11 +133,11 @@ public class Scrollable {
         return side;
     }
 
-    public void setRandomSide() {
+    // This method should be overrode for more specific purposes
+    protected void setRandomSide() {
         side = random.nextInt(2);
         if(side == 0)
             setXPosition(originalX);
         else setXPosition(originalX + width + 8);
-
     }
 }

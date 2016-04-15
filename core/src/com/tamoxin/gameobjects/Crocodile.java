@@ -22,5 +22,15 @@ public class Crocodile extends Scrollable{
     @Override
     public void reset(float newY) {
         super.reset(newY);
+        setRandomSide();
+    }
+
+    @Override
+    protected void setRandomSide() {
+        side = random.nextInt(2);
+        if(side == 0)
+            setXPosition(originalX);
+        else
+            setXPosition(originalX + width + 3);
     }
 }
