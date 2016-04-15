@@ -39,7 +39,6 @@ public class GameRenderer {
     private Queue <Crocodile> rightCrocodiles, leftCrocodiles;
     private Queue <Fly> leftFlies, rightFlies;
     private Queue <Scrollable> leftElements, rightElements;
-    private ScrollHandler handler;
 
     // Game Assets
     private TextureRegion background;
@@ -82,9 +81,8 @@ public class GameRenderer {
         leftCrocodiles = gameWorld.getLeftCrocodiles();
         rightCrocodiles = gameWorld.getRightCrocodiles();
         // Queues of elements
-        handler = gameWorld.getHandler();
-        leftElements = handler.getLeftElements();
-        rightElements = handler.getRightElements();
+        leftElements = gameWorld.getLeftElementsQueue();
+        rightElements = gameWorld.getRightElementsQueue();
     }
 
     private void initAssets() {
@@ -142,18 +140,13 @@ public class GameRenderer {
 
         batch.enableBlending();
 
-        leftCollisionsRenderer(runTime);
+        leftElementsRenderer(runTime);
         leftFrogRenderer(runTime);
         rightFrogRenderer(runTime);
-        leftElementsRenderer(runTime);
         //batch.draw(leftCrocodileAnimation.getKeyFrame(runTime), leftCrocodileTextureRegion.getX(),
         //        leftCrocodileTextureRegion.getY(), leftCrocodileTextureRegion.getWidth(), leftCrocodileTextureRegion.getHeight());
 
         batch.end();
-    }
-
-    private void leftCollisionsRenderer(float runTime) {
-        // Borré esto
     }
 
     // Crocodile id = 0

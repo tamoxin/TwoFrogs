@@ -14,34 +14,41 @@ public class Scrollable {
     private Vector2 velocity;
     private int height;
     private int width;
-    private boolean isScrolledDown;
-    private boolean itPassedMidPoint;
     private float gameHeight;
     private int id;
     private float originalY;
     private float originalX;
     private Random random;
     private int side;
-    private boolean hasType;
+    private boolean isScrolledDown;
+    private boolean itPassedMidPoint;
+    private boolean start;
 
     public Scrollable(float x, float y, int width, int height, float scrollSpeed, int id) {
-        position = new Vector2(x, y);
-        velocity = new Vector2(0, scrollSpeed);
+        gameHeight = Gdx.graphics.getHeight()/(Gdx.graphics.getWidth() / 136);
         this.height = height;
         this.width = width;
-        itPassedMidPoint = false;
-        isScrolledDown = false;
-        gameHeight = Gdx.graphics.getHeight()/(Gdx.graphics.getWidth() / 136);
         originalY = y;
         originalX = x;
+
+        position = new Vector2(x, y);
+        velocity = new Vector2(0, scrollSpeed);
+
+        itPassedMidPoint = false;
+        isScrolledDown = false;
+        start = false;
+
         this.id = id;
         random = new Random();
-        side = random.nextInt(2);
-        hasType = false;
         setRandomSide();
     }
 
     public void update(float delta) {
+
+        // Checks if the object should be scrolling
+        if(start == false)
+            return;
+
         position.add(velocity.cpy().scl(delta));
 
         if(position.y + (height/2) > gameHeight/2) {
@@ -60,7 +67,12 @@ public class Scrollable {
         itPassedMidPoint = false;
         isScrolledDown = false;
         setRandomSide();
+        start = false;
         //stop();
+    }
+
+    public void start() {
+        start = true;
     }
 
     public boolean isScrolledDown() {
@@ -106,10 +118,6 @@ public class Scrollable {
     public void stop() {
         velocity.y = 0;
         velocity.x = 0;
-    }
-
-    public boolean hasType() {
-        return hasType;
     }
 
     public int getId() {
