@@ -1,8 +1,10 @@
 package com.tamoxin.helpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -48,6 +50,13 @@ public class AssetLoader {
     public static TextureRegion rFly1, rFly2, rFly3, rFly4,
             rightFly[] = new TextureRegion[4];
 
+    // Sounds
+    public static Sound dead;
+    public static Sound eat;
+
+    // Fonts
+    public static BitmapFont font;
+
     public static void load() {
 
         // Background
@@ -58,6 +67,12 @@ public class AssetLoader {
         loadFrogs();
         loadCrocodiles();
         loadFlies();
+
+        dead = Gdx.audio.newSound(Gdx.files.internal("data/sounds/dead.ogg"));
+        eat = Gdx.audio.newSound(Gdx.files.internal("data/sounds/eat.ogg"));
+
+        font = new BitmapFont(Gdx.files.internal("data/fonts/lobster.fnt"));
+        font.getData().setScale(.25f, -.25f);
 
     }
 
@@ -179,5 +194,8 @@ public class AssetLoader {
         rightFlyTexture.dispose();
         leftCrocodileTexture.dispose();
         rightCrocodileTexture.dispose();
+        dead.dispose();
+        eat.dispose();
+        font.dispose();
     }
 }

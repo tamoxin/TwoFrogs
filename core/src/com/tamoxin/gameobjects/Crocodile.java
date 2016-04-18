@@ -10,6 +10,7 @@ import java.util.Vector;
  */
 public class Crocodile extends Scrollable{
 
+    // ID = 0
     public Crocodile(float x, float y, int width, int height, float scrollSpeed) {
         super(x, y, width, height, scrollSpeed, 0);
     }
@@ -27,8 +28,8 @@ public class Crocodile extends Scrollable{
 
     @Override
     protected void setRandomSide() {
-        side = random.nextInt(2);
-        if(side == 0)
+        side = random.nextInt(10);
+        if(side < 5)
             setXPosition(originalX);
         else
             setXPosition(originalX + width + 3);

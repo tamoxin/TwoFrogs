@@ -1,9 +1,14 @@
 package com.tamoxin.gameobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
+
+import aurelienribon.tweenengine.equations.Circ;
 
 /**
  * Created by Marco on 3/29/2016.
@@ -23,6 +28,7 @@ public class Scrollable {
     protected boolean isScrolledDown;
     protected boolean itPassedMidPoint;
     protected boolean start;
+    protected Circle circle;
 
     public Scrollable(float x, float y, int width, int height, float scrollSpeed, int id) {
         gameHeight = Gdx.graphics.getHeight()/(Gdx.graphics.getWidth() / 136);
@@ -41,6 +47,8 @@ public class Scrollable {
         this.id = id;
         random = new Random();
         setRandomSide();
+
+        circle = new Circle();
     }
 
     public void update(float delta) {
@@ -50,13 +58,14 @@ public class Scrollable {
             return;
 
         position.add(velocity.cpy().scl(delta));
+        setCircle();
 
         if(position.y + (height/2) > gameHeight/2) {
             itPassedMidPoint = true;
         }
 
         // If the Scrollable object is no longer visible:
-        if (position.y > gameHeight) {
+        if (position.y > gameHeight - 12) {
             isScrolledDown = true;
         }
     }
@@ -64,9 +73,18 @@ public class Scrollable {
     // Reset should override in subclass for more specific purposes
     public void reset(float newY) {
         setYPosition(newY);
+        setCircle();
         itPassedMidPoint = false;
         isScrolledDown = false;
         start = false;
+    }
+
+    public boolean collides(Frog frog) {
+        return Intersector.overlaps(frog.getBoundingCircle(), circle);
+    }
+
+    public boolean collidesGround(Rectangle ground) {
+        return Intersector.overlaps(circle, ground);
     }
 
     public void start() {
@@ -75,6 +93,10 @@ public class Scrollable {
 
     public boolean isStarted() {
         return start;
+    }
+
+    public void scrollDown() {
+        this.isScrolledDown = true;
     }
 
     public boolean isScrolledDown() {
@@ -99,7 +121,9 @@ public class Scrollable {
         return position.y;
     }
 
-    public float getOriginalY() { return originalY; }
+    public float getOriginalY() {
+        return originalY;
+    }
 
     public int getHeight() {
         return height;
@@ -126,11 +150,8 @@ public class Scrollable {
         return id;
     }
 
-    // Returns in which side is the object
-    // Returns 0 when is in the left
-    // Returns 1 when is in the right
-    public int getSide() {
-        return side;
+    public Circle getCircle() {
+        return circle;
     }
 
     // This method should be overrode for more specific purposes
@@ -139,5 +160,9 @@ public class Scrollable {
         if(side == 0)
             setXPosition(originalX);
         else setXPosition(originalX + width + 8);
+    }
+
+    protected void setCircle(){
+        circle.set(position.x + width/2, position.y + height/2, width / 2);
     }
 }

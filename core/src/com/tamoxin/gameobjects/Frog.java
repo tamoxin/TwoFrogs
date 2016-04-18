@@ -1,5 +1,6 @@
 package com.tamoxin.gameobjects;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -17,7 +18,10 @@ public class Frog {
     private float originalRightX;
 
     private boolean isInLeftSide;
-    private boolean isDead;
+    private boolean isAlive;
+
+    private Circle boundingCircle;
+    private boolean isEating;
 
     public Frog(float x, float y, int width, int height) {
 
@@ -28,11 +32,14 @@ public class Frog {
         originalX = x;
         originalRightX = originalX + 34;
         isInLeftSide = true;
-        isDead = false;
+        isAlive = true;
+        boundingCircle = new Circle();
+        isEating = false;
     }
 
     public void update(float delta) {
         position.add(velocity.cpy().scl(delta));
+        boundingCircle.set(position.x + width/2, position.y + height/2 + 1, width/2 - 1);
 
         if(position.x <= originalX) {
             velocity.x = 0;
@@ -60,21 +67,32 @@ public class Frog {
     }
 
     public void onClick() {
-        if (isInLeftSide) {
-            velocity.x = 140;
-            isInLeftSide = false;
-        } else {
-            velocity.x = -140;
-            isInLeftSide = true;
+        // Cannot tap the frog when game over
+        if (this.isAlive()) {
+            if (isInLeftSide) {
+                velocity.x = 140;
+                isInLeftSide = false;
+            } else {
+                velocity.x = -140;
+                isInLeftSide = true;
+            }
         }
     }
 
-    public boolean isDead(){
-        return isDead;
+    public void setEatingState(boolean state) {
+        this.isEating = state;
+    }
+
+    public boolean isEating() {
+        return isEating;
+    }
+
+    public boolean isAlive(){
+        return isAlive;
     }
 
     public void killFrog(){
-        isDead = false;
+        isAlive = false;
     }
 
     public boolean isGoingRight() {
@@ -89,8 +107,16 @@ public class Frog {
         return position.x;
     }
 
+    public void setX(float x) {
+        position.x = x;
+    }
+
     public float getY() {
         return position.y;
+    }
+
+    public void setY(float y) {
+        position.y = y;
     }
 
     public float getWidth() {
@@ -103,5 +129,14 @@ public class Frog {
 
     public float getRotation() {
         return rotation;
+    }
+
+    public Circle getBoundingCircle() {
+        return boundingCircle;
+    }
+
+    public void stop() {
+        velocity.x = 0;
+        velocity.y = 0;
     }
 }

@@ -7,6 +7,7 @@ import java.util.Random;
  */
 public class Fly extends Scrollable {
 
+    // ID = 1
     public Fly(float x, float y, int width, int height, float scrollSpeed) {
         super(x, y, width, height, scrollSpeed, 1);
     }
@@ -24,10 +25,15 @@ public class Fly extends Scrollable {
 
     @Override
     protected void setRandomSide() {
-        side = random.nextInt(2);
-        if(side == 0)
+        side = random.nextInt(10);
+        if(side < 5)
             setXPosition(originalX);
         else
             setXPosition(originalX + width + 20);
+    }
+
+    @Override
+    protected void setCircle() {
+        circle.set(position.x + width/2 - 1, position.y + height/2 + 1, width / 2 - 1);
     }
 }

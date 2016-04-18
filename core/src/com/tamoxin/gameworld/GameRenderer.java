@@ -1,6 +1,7 @@
 package com.tamoxin.gameworld;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.utils.Queue;
 import com.tamoxin.gameobjects.Crocodile;
 import com.tamoxin.gameobjects.Fly;
 import com.tamoxin.gameobjects.Frog;
+import com.tamoxin.gameobjects.ScrollHandler;
 import com.tamoxin.gameobjects.Scrollable;
 import com.tamoxin.helpers.AssetLoader;
 
@@ -22,41 +24,32 @@ import java.util.Random;
 public class GameRenderer {
 
     private GameWorld gameWorld;
-    private OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
-
-    private Random column;
 
     private SpriteBatch batch;
 
     private int gameHeight;
-    private int gameMid;
 
     // Game Objects
     private Frog leftFrog;
     private Frog rightFrog;
-    private Queue <Crocodile> rightCrocodiles, leftCrocodiles;
-    private Queue <Fly> leftFlies, rightFlies;
     private Queue <Scrollable> leftElements, rightElements;
+    private ScrollHandler handler;
 
     // Game Assets
     private TextureRegion background;
-    private TextureRegion lFrog, lFrogStart, lFrogEnd;
-    private TextureRegion rFrog, rFrogStart, rFrogEnd;
     private TextureRegion[] leftCrocodileTextureRegion, rightCrocodileTextureRegion;
     private TextureRegion[] leftFly, rightFly;
-    private Animation leftFrogAnimation, rightFrogAnimation, rightCrocodileAnimation,
-                        leftCrocodileAnimation, leftFlyAnimation, rightFlyAnimation;
+    private Animation leftFrogAnimation, rightFrogAnimation, rightCrocodileAnimation;
+    private Animation leftCrocodileAnimation, leftFlyAnimation, rightFlyAnimation;
     private Animation leftAnimation, rightAnimation;
 
-    // Constructor
     public GameRenderer(GameWorld world, int bottom) {
         gameWorld = world;
 
         gameHeight = bottom;
-        gameMid = gameHeight / 2;
 
-        camera = new OrthographicCamera();
+        OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(true, 136, bottom);
 
         batch = new SpriteBatch();
@@ -68,35 +61,20 @@ public class GameRenderer {
         // Call helper methods to initialize instance variables
         initGameObjects();
         initAssets();
-
-        column =  new Random();
     }
 
     private void initGameObjects() {
+
         leftFrog = gameWorld.getLeftFrog();
         rightFrog = gameWorld.getRightFrog();
-        leftFlies = gameWorld.getLeftFlies();
-        rightFlies = gameWorld.getRightFlies();
-        leftCrocodiles = gameWorld.getLeftCrocodiles();
-        rightCrocodiles = gameWorld.getRightCrocodiles();
-        // Queues of elements
-        leftElements = gameWorld.getLeftElementsQueue();
-        rightElements = gameWorld.getRightElementsQueue();
+        handler = gameWorld.getHandler();
+        leftElements = handler.getLeftElements();
+        rightElements = handler.getRightElements();
     }
 
     private void initAssets() {
         // Background
         background = AssetLoader.background;
-
-        // Left Frog
-        lFrog = AssetLoader.lFrog;
-        lFrogStart = AssetLoader.lFrogStart;
-        lFrogEnd = AssetLoader.lFrogEnd;
-
-        // Right Frog
-        rFrog = AssetLoader.rFrog;
-        rFrogStart = AssetLoader.rFrogStart;
-        rFrogEnd = AssetLoader.rFrogEnd;
 
         // Left Crocodile
         leftCrocodileTextureRegion = new TextureRegion[5];
@@ -139,28 +117,31 @@ public class GameRenderer {
 
         batch.enableBlending();
 
-        rightElementsRenderer(runTime);
         leftElementsRenderer(runTime);
+        rightElementsRenderer(runTime);
         leftFrogRenderer(runTime);
         rightFrogRenderer(runTime);
-        //batch.draw(leftCrocodileAnimation.getKeyFrame(runTime), leftCrocodileTextureRegion.getX(),
-        //        leftCrocodileTextureRegion.getY(), leftCrocodileTextureRegion.getWidth(), leftCrocodileTextureRegion.getHeight());
 
+        // Convert integer into String
+        String score = gameWorld.getScore() + "";
+
+        // Draw text
+        AssetLoader.font.draw(batch, "" + gameWorld.getScore(), (136 / 2) - (3 * score.length() - 1), 11);
         batch.end();
-    }
 
-    // Crocodile id = 0
-    // Fly id = 1
-    private Scrollable rightCollisionsRenderer() {
+        // Delete this when tests are finished
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRenderer.setColor(Color.RED);
+//        shapeRenderer.circle(leftFrog.getBoundingCircle().x, leftFrog.getBoundingCircle().y, leftFrog.getBoundingCircle().radius);
+//        shapeRenderer.circle(rightFrog.getBoundingCircle().x, rightFrog.getBoundingCircle().y, rightFrog.getBoundingCircle().radius);
+//        for(int i = 0; i < leftElements.size; i++) {
+//            shapeRenderer.circle(leftElements.get(i).getCircle().x,
+//                    leftElements.get(i).getCircle().y, leftElements.get(i).getCircle().radius);
+//            shapeRenderer.circle(rightElements.get(i).getCircle().x,
+//                    rightElements.get(i).getCircle().y, rightElements.get(i).getCircle().radius);
+//        }
+//        shapeRenderer.end();
 
-        int id = column.nextInt(2);
-        Gdx.app.log("ID right",id + "");
-
-        if(id == 0) {
-            return leftCrocodiles.get(0);
-        }
-
-        return leftFlies.get(0);
     }
 
     private void leftFrogRenderer(float runTime) {
@@ -178,7 +159,7 @@ public class GameRenderer {
     private void leftElementsRenderer(float runTime) {
 
         for(int i = 0; i < leftElements.size; i++) {
-            if(leftElements.get(i).isStarted() == false){ break; }
+            if(!leftElements.get(i).isStarted()){ break; }
 
             if(leftElements.get(i).getId() == 0) {
                 leftAnimation = leftCrocodileAnimation;
@@ -193,7 +174,7 @@ public class GameRenderer {
 
     private void rightElementsRenderer(float runTime) {
         for(int i = 0; i < rightElements.size; i++) {
-            if(rightElements.get(i).isStarted() == false) { break; }
+            if(!rightElements.get(i).isStarted()) { break; }
 
             if(rightElements.get(i).getId() == 0) {
                 rightAnimation = rightCrocodileAnimation;
