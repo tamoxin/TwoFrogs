@@ -23,11 +23,13 @@ public class Scrollable {
     protected int id;
     protected float originalY;
     protected float originalX;
+    protected float originalScrollSpeed;
     protected Random random;
     protected int side;
     protected boolean isScrolledDown;
     protected boolean itPassedMidPoint;
     protected boolean start;
+    protected boolean hasEaten;
     protected Circle circle;
 
     public Scrollable(float x, float y, int width, int height, float scrollSpeed, int id) {
@@ -36,13 +38,16 @@ public class Scrollable {
         this.width = width;
         originalY = y;
         originalX = x;
+        originalScrollSpeed = scrollSpeed;
 
         position = new Vector2(x, y);
         velocity = new Vector2(0, scrollSpeed);
 
+
         itPassedMidPoint = false;
         isScrolledDown = false;
         start = false;
+        hasEaten = false;
 
         this.id = id;
         random = new Random();
@@ -72,11 +77,17 @@ public class Scrollable {
 
     // Reset should override in subclass for more specific purposes
     public void reset(float newY) {
-        setYPosition(newY);
-        setCircle();
+        position.y = newY;
+        this.setCircle();
         itPassedMidPoint = false;
         isScrolledDown = false;
         start = false;
+    }
+
+    public void onRestart() {
+        reset(originalY);
+        velocity.y = originalScrollSpeed;
+        hasEaten = false;
     }
 
     public boolean collides(Frog frog) {
@@ -164,5 +175,9 @@ public class Scrollable {
 
     protected void setCircle(){
         circle.set(position.x + width/2, position.y + height/2, width / 2);
+    }
+
+    public void setEaten(boolean eaten) {
+        this.hasEaten = eaten;
     }
 }

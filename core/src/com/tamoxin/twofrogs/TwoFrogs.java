@@ -1,17 +1,17 @@
 package com.tamoxin.twofrogs;
 
-		import com.badlogic.gdx.Game;
-		import com.badlogic.gdx.Gdx;
-		import com.tamoxin.helpers.AssetLoader;
-		import com.tamoxin.screens.GameScreen;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.tamoxin.helpers.AssetLoader;
+import com.tamoxin.screens.GameScreen;
+import com.tamoxin.screens.SplashScreen;
 
 public class TwoFrogs extends Game {
 
 	@Override
 	public void create() {
-		Gdx.app.log("ZBGame", "created");
 		AssetLoader.load();
-		setScreen(new GameScreen());
+		setScreen(new SplashScreen(this));
 	}
 
 	@Override

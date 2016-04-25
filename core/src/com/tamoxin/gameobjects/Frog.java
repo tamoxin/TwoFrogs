@@ -14,6 +14,7 @@ public class Frog {
     private float rotation;
     private int width;
     private int height;
+
     private float originalX;
     private float originalRightX;
 
@@ -22,9 +23,10 @@ public class Frog {
 
     private Circle boundingCircle;
     private boolean isEating;
+    private boolean wasEaten;
+
 
     public Frog(float x, float y, int width, int height) {
-
         this.height = height;
         this.width = width;
         position = new Vector2(x, y);
@@ -35,6 +37,7 @@ public class Frog {
         isAlive = true;
         boundingCircle = new Circle();
         isEating = false;
+        wasEaten = false;
     }
 
     public void update(float delta) {
@@ -79,6 +82,35 @@ public class Frog {
         }
     }
 
+    public void goLeft() {
+        if (this.isAlive()) {
+            if (!isInLeftSide) {
+                velocity.x = -140;
+                isInLeftSide = true;
+            }
+        }
+    }
+
+    public void goRight() {
+        if (this.isAlive()) {
+            if (isInLeftSide) {
+                velocity.x = 140;
+                isInLeftSide = false;
+            }
+        }
+    }
+
+    public void onRestart() {
+        position.x = originalX;
+        rotation = 0;
+        velocity.x = 0;
+        velocity.y = 0;
+        isAlive = true;
+        isInLeftSide = true;
+        isEating = false;
+        wasEaten = false;
+    }
+
     public void setEatingState(boolean state) {
         this.isEating = state;
     }
@@ -89,6 +121,14 @@ public class Frog {
 
     public boolean isAlive(){
         return isAlive;
+    }
+
+    public boolean wasEaten() {
+        return wasEaten;
+    }
+
+    public void setEatenState(boolean wasEaten) {
+        this.wasEaten = wasEaten;
     }
 
     public void killFrog(){

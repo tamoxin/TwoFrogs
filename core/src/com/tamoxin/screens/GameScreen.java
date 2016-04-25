@@ -6,9 +6,6 @@ import com.tamoxin.gameworld.GameRenderer;
 import com.tamoxin.gameworld.GameWorld;
 import com.tamoxin.helpers.InputHandler;
 
-/**
- * Created by Marco on 3/18/2016.
- */
 public class GameScreen implements Screen {
 
     private GameWorld gameWorld;
@@ -24,15 +21,10 @@ public class GameScreen implements Screen {
         float gameHeight = screenHeight / (screenWidth / gameWidth);
 
         int bottom = (int) gameHeight;
-        Gdx.app.log("Game Height", gameHeight+"");
-        Gdx.app.log("Screen Height", screenHeight+"");
-        Gdx.app.log("Game Width", gameWidth+"");
-        Gdx.app.log("Screen Width", screenWidth+"");
-        Gdx.app.log("Bottom", bottom+"");
 
         gameWorld = new GameWorld(bottom);
+        Gdx.input.setInputProcessor(new InputHandler(gameWorld, screenWidth / gameWidth, screenHeight / gameHeight));
         gameRenderer = new GameRenderer(gameWorld, bottom);
-        Gdx.input.setInputProcessor(new InputHandler(gameWorld.getLeftFrog(), gameWorld.getRightFrog()));
     }
 
     @Override
@@ -44,7 +36,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         runTime += delta;
         gameWorld.update(delta);
-        gameRenderer.render(runTime);
+        gameRenderer.render(delta, runTime);
     }
 
     @Override

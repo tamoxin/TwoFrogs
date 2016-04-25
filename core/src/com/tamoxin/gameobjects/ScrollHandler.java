@@ -1,9 +1,7 @@
 package com.tamoxin.gameobjects;
 
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Queue;
-import com.tamoxin.gameworld.GameWorld;
 
 import java.util.Random;
 
@@ -12,7 +10,7 @@ import java.util.Random;
  */
 public class ScrollHandler {
 
-    private final int OBJECTS_SPEED = 100;
+    private final int OBJECTS_SPEED = 130;
     private final int CROCODILE_HEIGHT = 29;
     private final int CROCODILE_WIDTH = 31;
     private final int FLY_HEIGHT = 12;//24
@@ -92,9 +90,12 @@ public class ScrollHandler {
 
     public boolean collidesWithCrocodile(Frog leftFrog, Frog rightFrog) {
         for(int i = 0; i < leftElements.size; i++) {
+
             if(leftElements.get(i).collides(leftFrog) && leftElements.get(i).getId() == 0) {
                 leftFrog.setX(leftElements.get(i).getX() + 2);
                 leftElements.get(i).setYPosition(leftFrog.getY() - 4);
+                leftElements.get(i).setEaten(true);
+                leftFrog.setEatenState(true);
                 leftFrog.killFrog();
                 rightFrog.killFrog();
                 return true;
@@ -102,6 +103,8 @@ public class ScrollHandler {
             } else if(rightElements.get(i).collides(rightFrog) && rightElements.get(i).getId() == 0 ) {
                 rightFrog.setX(rightElements.get(i).getX() + 2);
                 rightElements.get(i).setYPosition(rightFrog.getY() - 4);
+                rightElements.get(i).setEaten(true);
+                rightFrog.setEatenState(true);
                 rightFrog.killFrog();
                 leftFrog.killFrog();
                 return true;
@@ -124,7 +127,6 @@ public class ScrollHandler {
     // Update queues
     private void updateLeftElementsQueue(float delta) {
         for(int i = 0; i < leftElements.size; i++) {
-
             leftElements.get(i).update(delta);
 
             if(leftElements.get(i).hasPassedMidPoint()) {
@@ -255,4 +257,14 @@ public class ScrollHandler {
         return rightElements;
     }
 
+    public void onRestart() {
+        leftElements.addLast(leftElements.removeFirst());
+        rightElements.addLast(rightElements.removeFirst());
+        for(int i = 0; i < leftElements.size; i++){
+            leftElements.get(i).onRestart();
+            rightElements.get(i).onRestart();
+            leftElements.first().start();
+            rightElements.first().start();
+        }
+    }
 }
