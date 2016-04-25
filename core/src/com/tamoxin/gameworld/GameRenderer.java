@@ -158,6 +158,8 @@ public class GameRenderer {
                 // Draw text
                 AssetLoader.font.draw(batch, highScore, (136 / 2)
                         - (4 * highScore.length()), 85);
+                leftFrogRenderer(runTime);
+                rightFrogRenderer(runTime);
             }
             else {
                 AssetLoader.font.draw(batch, "High Score!", 27, 55);

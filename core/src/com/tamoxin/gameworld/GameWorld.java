@@ -69,7 +69,7 @@ public class GameWorld {
             handler.stop();
             leftFrog.stop();
             rightFrog.stop();
-            AssetLoader.dead.play();
+            AssetLoader.dead.setVolume(AssetLoader.dead.play(), .1f);
 
             if(score > AssetLoader.getHighScore()) {
                 AssetLoader.setHighScore(score);
@@ -79,7 +79,7 @@ public class GameWorld {
             }
         } else if(handler.collidesWithFly(leftFrog, rightFrog)) {
             addScore(1);
-            AssetLoader.eat.play();
+            AssetLoader.eat.setVolume(AssetLoader.eat.play(), .1f);
         } else {
             leftFrog.setEatingState(false);
             rightFrog.setEatingState(false);
